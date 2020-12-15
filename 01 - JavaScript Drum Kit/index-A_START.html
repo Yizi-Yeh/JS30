@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS Drum Kit</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="keys">
+      <div data-key="65" class="key">
+        <kbd>A</kbd>
+        <span class="sound">clap</span>
+      </div>
+      <div data-key="83" class="key">
+        <kbd>S</kbd>
+        <span class="sound">hihat</span>
+      </div>
+      <div data-key="68" class="key">
+        <kbd>D</kbd>
+        <span class="sound">kick</span>
+      </div>
+      <div data-key="70" class="key">
+        <kbd>F</kbd>
+        <span class="sound">openhat</span>
+      </div>
+      <div data-key="71" class="key">
+        <kbd>G</kbd>
+        <span class="sound">boom</span>
+      </div>
+      <div data-key="72" class="key">
+        <kbd>H</kbd>
+        <span class="sound">ride</span>
+      </div>
+      <div data-key="74" class="key">
+        <kbd>J</kbd>
+        <span class="sound">snare</span>
+      </div>
+      <div data-key="75" class="key">
+        <kbd>K</kbd>
+        <span class="sound">tom</span>
+      </div>
+      <div data-key="76" class="key">
+        <kbd>L</kbd>
+        <span class="sound">tink</span>
+      </div>
+    </div>
+    <!-- data-key 為鍵盤keycode -->
+    <audio data-key="65" src="sounds/clap.wav"></audio>
+    <audio data-key="83" src="sounds/hihat.wav"></audio>
+    <audio data-key="68" src="sounds/kick.wav"></audio>
+    <audio data-key="70" src="sounds/openhat.wav"></audio>
+    <audio data-key="71" src="sounds/boom.wav"></audio>
+    <audio data-key="72" src="sounds/ride.wav"></audio>
+    <audio data-key="74" src="sounds/snare.wav"></audio>
+    <audio data-key="75" src="sounds/tom.wav"></audio>
+    <audio data-key="76" src="sounds/tink.wav"></audio>
+
+    <script>
+      // 將所有程式包在一起
+      // 點擊事件觸發keydown及CSS效果
+      // 鍵盤 捲軸 旋轉 >>將事件做在windows上
+      // keydown && keyup --> keydown 為按下觸發 若希望使用者放開觸發則使用 keyup事件
+      (function () {
+        window.addEventListener("keydown", playHandler);
+        function playHandler(e) {
+          //play music
+
+          const audio = document.querySelector(
+            `audio[data-key="${e.keyCode}"]`
+          );
+          // 如果找到audio 就播放
+          if (audio) audio.play();
+
+          //dom style
+          const dom = document.querySelector(`div[data-key="${e.keyCode}"]`);
+          // 如果有找到dom 就加上class
+          if (dom) dom.classList.add("playing");
+          // 希望聲音連續播
+          audio.currentTime = 0;
+          // console.log(audio, dom);
+
+          document.querySelectorAll(".key").forEach(function (key) {
+            // 待動畫結束移除class
+            key.addEventListener("transitionend", transitionendHandler);
+            console.log(e.propertyName);
+          });
+
+          function transitionendHandler(e) {
+            if (e.propertyName === "transform") {
+              e.currentTarget.classList.remove("playing");
+            }
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>
