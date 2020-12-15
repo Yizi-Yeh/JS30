@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS + CSS Clock</title>
+  </head>
+  <body>
+    <div class="clock">
+      <div class="clock-face">
+        <div class="hand hour-hand"></div>
+        <div class="hand min-hand"></div>
+        <div class="hand second-hand"></div>
+      </div>
+    </div>
+
+    <style>
+      html {
+        background: #018ded url(https://unsplash.it/1500/1000?image=881&blur=5);
+        background-size: cover;
+        font-family: "helvetica neue";
+        text-align: center;
+        font-size: 10px;
+      }
+
+      body {
+        margin: 0;
+        font-size: 2rem;
+        display: flex;
+        flex: 1;
+        min-height: 100vh;
+        align-items: center;
+      }
+
+      .clock {
+        width: 30rem;
+        height: 30rem;
+        border: 20px solid white;
+        border-radius: 50%;
+        margin: 50px auto;
+        position: relative;
+        padding: 2rem;
+        box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1), inset 0 0 0 3px #efefef,
+          inset 0 0 10px black, 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .clock-face {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform: translateY(
+          -3px
+        ); /* account for the height of the clock hands */
+      }
+      /* 中心原點 */
+      .clock-face::after {
+        content: " ";
+        position: absolute;
+        height: 30px;
+        width: 30px;
+        border-radius: 100%;
+        background-color: white;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .hand {
+        width: 100%;
+        height: 100%;
+      }
+      .second-hand::after {
+        position: absolute;
+        content: " ";
+        width: 10px;
+        height: 50%;
+        background-color: navy;
+        left: 50%;
+        bottom: 50%;
+        display: block;
+        transform: translate(-50%, 0%);
+      }
+      .hour-hand::after {
+        position: absolute;
+        content: " ";
+        width: 15px;
+        height: 20%;
+        background-color: tan;
+        left: 50%;
+        bottom: 50%;
+        display: block;
+        transform: translate(-50%, 0%);
+      }
+      .min-hand::after {
+        position: absolute;
+        content: " ";
+        width: 10px;
+        height: 40%;
+        background-color: tan;
+        left: 50%;
+        bottom: 50%;
+        display: block;
+        transform: translate(-50%, 0%);
+      }
+    </style>
+
+    <script>
+      (function () {
+        // 抓取ＤＯＭ
+        const second = document.querySelector(".second-hand");
+        const min = document.querySelector(".min-hand");
+        const hour = document.querySelector(".hour-hand");
+
+        function setClock() {
+          // data 取得時間物件
+          const data = new Date();
+          console.log(new Date());
+          // 利用時間物件抓取 秒分時
+
+          let secondDeg = data.getSeconds() * 6;
+          let minDeg = data.getMinutes() * 6;
+          let hourDeg = data.getHours() * 30;
+
+          // 新增特性
+
+          second.style.transform = `rotate(${secondDeg}dge)`;
+          min.style.transform = `rotate(${minDeg}dge)`;
+          hour.style.transform = `rotate(${hourDeg}dge)`;
+        }
+        setClock();
+        setInterval(setClock, 1000);
+      })();
+    </script>
+  </body>
+</html>
