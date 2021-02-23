@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>HTML5 Canvas</title>
+  </head>
+  <body>
+    <!-- 預設 800 x 800 canvas-->
+    <canvas id="draw" width="800" height="800"></canvas>
+    <script>
+      // 從事件開始處理
+      (function () {
+        let canvas = document.querySelector("#draw");
+        let ctx = canvas.getContext("2d");
+        let colorDeg = 0;
+        let lineWidth = 50;
+        let direction = -1;
+        ctx.strokeStyle = `hsl(${colorDeg},100%,50%)`;
+        ctx.lineWidth = lineWidth;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+
+        // 預設初始無法畫圖
+        let drawing = false;
+        let x = 0,
+          y = 0;
+
+        // 當 mousedown 按下時, drawing = true
+        canvas.addEventListener("mousedown", (e) => {
+          drawing = true;
+          // ES6 賦值
+          [x, y] = [e.offsetX, e.offsetY];
+        });
+
+        // 因為 mousemove 是連續觸發的，所以需要紀錄畫畫的狀況
+        canvas.addEventListener("mousemove", (e) => {
+          // 如果不是畫畫的狀態,則不往下做
+          if (!drawing) return;
+
+          // 開始畫線
+          ctx.beginPath();
+          // 三元判斷
+          colorDeg = colorDeg < 360 ? colorDeg + 1 : 0;
+          ctx.strokeStyle = `hsl(${colorDeg},100%,50%)`;
+          if (lineWidth < 1 || lineWidth > 50) {
+            direction *= -1;
+          }
+          lineWidth += direction;
+          ctx.lineWidth = lineWidth;
+          // 將位置移至按下處
+          ctx.moveTo(x, y);
+          // 連線至現在的位置
+          ctx.lineTo(e.offsetX, e.offsetY);
+          [x, y] = [e.offsetX, e.offsetY];
+          ctx.stroke();
+        });
+        //  當 mouseup 放開時, drawing = false
+        canvas.addEventListener("mouseup", () => {
+          drawing = false;
+        });
+
+        // 離開範圍的事件 (加入 mouseout && mouseleave )
+        // canvas.addEventListener("mouseout", () => {});
+        // 離開範圍時也改為false
+        canvas.addEventListener("mouseleave", () => {
+          drawing = false;
+        });
+      })();
+    </script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </body>
+</html>
